@@ -1,26 +1,21 @@
-HexGL
-=========
+# AI Camera Racing Game
 
-Source code of [HexGL](http://hexgl.bkcore.com), the futuristic HTML5 racing game by [Thibaut Despoulain](http://bkcore.com)
+AI 카메라 통합 기능이 있는 HexGL 기반 미래형 HTML5 레이싱 게임.
 
-## Branches
-  * **[Master](https://github.com/BKcore/HexGL)** - Public release (stable).
+## 소개
 
-## License
+이 프로젝트는 [Thibaut Despoulain](http://bkcore.com)이 만든 미래형 HTML5 레이싱 게임 [HexGL](http://hexgl.bkcore.com)을 기반으로 합니다.
 
-Unless specified in the file, HexGL's code and resources are now licensed under the *MIT License*.
-
-## Installation
+## 설치 방법
 
 	cd ~/
-	git clone git://github.com/BKcore/HexGL.git
-	cd HexGL
+	git clone git://github.com/joehyejeong/ai_camera_racing_game.git
+	cd ai_camera_racing_game
 	python -m SimpleHTTPServer
 	chromium index.html
 
-To use full size textures, swap the two textures/ and textures.full/ directories.
+전체 해상도 텍스처를 사용하려면 textures/와 textures.full/ 디렉토리를 교체하세요.
 
-## Note
+## 라이선스
 
-The development of HexGL is in a hiatus for now until I find some time and interest to work on it again.
-That said, feel free to post issues, patches, or anything to make the game better and I'll gladly review and merge them.
+파일에 별도로 명시되지 않은 한, 코드와 리소스는 *MIT 라이선스*를 따릅니다.
