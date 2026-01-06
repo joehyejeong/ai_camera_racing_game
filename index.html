@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>HexGL by BKcore</title>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="HexGL is a futuristic racing game built by Thibaut Despoulain (BKcore) using HTML5, Javascript and WebGL. Come challenge your friends on this fast-paced 3D game!">
+  <meta property="og:title" content="HexGL, the HTML5 futuristic racing game." />
+  <meta property="og:type" content="game" />
+  <meta property="og:url" content="http://hexgl.bkcore.com/" />
+  <meta property="og:image" content="http://hexgl.bkcore.com/image.png" />
+  <meta property="og:site_name" content="HexGL by BKcore" />
+  <meta property="fb:admins" content="1482017639" />
+  <link rel="icon" href="http://hexgl.bkcore.com/favicon.png" type="image/png">
+  <link rel="shortcut icon" href="http://hexgl.bkcore.com/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="css/multi.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="css/fonts.css" type="text/css" charset="utf-8">
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    canvas {
+      pointer-events: none;
+      width: 100%;
+    }
+
+    #overlay {
+      position: absolute;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    #best-score {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      z-index: 10000;
+      color: #ffffff;
+      font-family: "BebasNeueRegular", "Arial", sans-serif;
+      font-size: 32px;
+      letter-spacing: 1px;
+      text-align: left;
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+      display: none;
+      line-height: 36px;
+      white-space: pre;
+    }
+  </style>
+  <script type="text/javascript">
+    //analytics
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-26274524-4']);
+    _gaq.push(['_trackPageview']);
+    (function () {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="step-1">
+    <div id="global"></div>
+    <div id="title">
+    </div>
+    <div id="menucontainer">
+      <div id="menu">
+        <div id="start">Start</div>
+        <div id="s-controlType">Controls: AI CAMERA</div>
+        <div id="s-quality" style="display: none">Quality: High</div>
+        <div id="s-hud">Web Serial</div>
+        <div id="s-godmode" style="display: none">Godmode: Off</div>
+        <div id="s-ranking">RANKING</div>
+        <div id="s-help">HELP</div>
+      </div>
+    </div>
+  </div>
+  <div id="step-2" style="display: none">
+    <div id="ctrl-help">Click/Touch to continue.</div>
+  </div>
+  <div id="step-3" style="display: none">
+    <div id="progressbar"></div>
+  </div>
+  <div id="step-4" style="display: none">
+    <div id="best-score"></div>
+    <div id="mini-map">
+      <canvas id="mini-map-canvas"></canvas>
+    </div>
+    <div id="overlay"></div>
+    <div id="main"></div>
+  </div>
+  <div id="step-5" style="display: none">
+    <div id="time"></div>
+    <div id="best-score-final"></div>
+    <div id="best-score-message"></div>
+    <div id="ctrl-help">Click/Touch to continue.</div>
+  </div>
+  <div id="ranking" style="display: none">
+    <h3>Best Times</h3>
+    <div id="ranking-list"
+      style="margin-top: 40px; font-size: 1.6em; line-height: 1.8em; white-space: pre; color: #fff;"></div>
+    <h4 style="margin-top: 60px;">Click anywhere to continue.</h4>
+  </div>
+  <div id="help" style="display: none">
+    <div id="help-image-container"></div>
+    <div id="ctrl-help-help"
+      style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); font-size: 2em; color: white; cursor: pointer;">
+      Click/Touch to continue.</div>
+  </div>
+
+  <div id="leapinfo" style="display: none"></div>
+
+  <script src="libs/leap-0.4.1.min.js"></script>
+  <script src="libs/Three.dev.js"></script>
+  <script src="libs/ShaderExtras.js"></script>
+  <script src="libs/postprocessing/EffectComposer.js"></script>
+  <script src="libs/postprocessing/RenderPass.js"></script>
+  <script src="libs/postprocessing/BloomPass.js"></script>
+  <script src="libs/postprocessing/ShaderPass.js"></script>
+  <script src="libs/postprocessing/MaskPass.js"></script>
+  <script src="libs/Detector.js"></script>
+  <script src="libs/Stats.js"></script>
+  <script src="libs/DAT.GUI.min.js"></script>
+
+  <script src="bkcore.coffee/controllers/TouchController.js"></script>
+  <script src="bkcore.coffee/controllers/OrientationController.js"></script>
+  <script src="bkcore.coffee/controllers/GamepadController.js"></script>
+
+  <script src="bkcore.coffee/Timer.js"></script>
+  <script src="bkcore.coffee/ImageData.js"></script>
+  <script src="bkcore.coffee/Utils.js"></script>
+
+  <script src="bkcore/threejs/RenderManager.js"></script>
+  <script src="bkcore/threejs/Shaders.js"></script>
+  <script src="bkcore/threejs/Particles.js"></script>
+  <script src="bkcore/threejs/Loader.js"></script>
+
+  <script src="bkcore/Audio.js"></script>
+
+  <script src="bkcore/hexgl/HUD.js"></script>
+  <script src="bkcore/hexgl/RaceData.js"></script>
+  <script src="bkcore/hexgl/ShipControls.js"></script>
+  <script src="bkcore/hexgl/ShipEffects.js"></script>
+  <script src="bkcore/hexgl/CameraChase.js"></script>
+  <script src="bkcore/hexgl/Gameplay.js"></script>
+
+  <script src="bkcore/hexgl/tracks/Cityscape.js"></script>
+
+  <script src="bkcore/hexgl/HexGL.js"></script>
+
+  <script src="launch.js"></script>
+
+</body>
+
+</html>
