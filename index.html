@@ -21,11 +21,16 @@
     body {
       padding: 0;
       margin: 0;
+      overflow: hidden;
+      height: 100vh;
     }
 
     canvas {
       pointer-events: none;
-      width: 100%;
+      height: 100vh !important;
+      width: auto !important;
+      display: block;
+      margin: 0 auto;
     }
 
     #overlay {
@@ -34,6 +39,7 @@
       top: 0;
       left: 0;
       width: 100%;
+      height: 100%;
     }
 
     #best-score {
