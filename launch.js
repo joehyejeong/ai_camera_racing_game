@@ -23,6 +23,23 @@
       track: 'Cityscape'
     });
     window.hexGL = hexGL;
+    //화면 크기가 변경 될 때마다 랜더러와 HUD가 자동 조절 
+    window.addEventListener('resize', function () {
+      var width = window.innerWidth;
+      var height = window.innerHeight;
+
+      hexGL.width = width;
+      hexGL.height = height;
+
+      if (hexGL.renderer) {
+        hexGL.renderer.setSize(width, height);
+      }
+
+      if (hexGL.hud && hexGL.hud.canvas) {
+        hexGL.hud.canvas.width = width;
+        hexGL.hud.canvas.height = height;
+      }
+    });
     progressbar = $('progressbar');
     return hexGL.load({
       onLoad: function () {
